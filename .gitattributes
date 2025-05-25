@@ -1,0 +1,27 @@
+# Ensure all text files use LF for end of line
+* text=auto eol=lf
+
+# Treat these file types as text
+*.js     text
+*.ts     text
+*.json   text
+*.css    text
+*.html   text
+*.md     text
+*.yml    text
+*.yaml   text
+
+# Mark binary files to avoid EOL conversion
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.ico    binary
+*.pdf    binary
+*.zip    binary
+*.gz     binary
+
+# Prevent merge conflicts in lock files
+package-lock.json merge=union
+yarn.lock        merge=union
+bun.lock				 merge=union
