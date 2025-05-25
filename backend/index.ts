@@ -10,7 +10,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 
 app.get('/', (req, res) => {
-  res.sendFile(join(__dirname, 'index.html'));
+  res.sendFile(join(__dirname, '../index.html'));
 });
 
 
