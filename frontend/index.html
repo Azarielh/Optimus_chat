@@ -22,7 +22,6 @@
         <p>This is a simple chat application.</p>
     </section>
     <section>
-        <h2>Chat Messages</h2>
         <ul id="messages">
 
             <!-- Chat messages will be dynamically inserted here -->
@@ -32,5 +31,27 @@
             <button type="submit">Send</button>
         </form>
     </section>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    const form = document.getElementById('form');
+    const input = document.getElementById('chat_input');
+    const messages = document.getElementById('messages');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        if (input.value) {
+            socket.emit('chat message', input.value);
+            input.value = '';
+        }
+    });
+    socket.on('chat message', (msg) => {
+    const item = document.createElement('li');
+    item.textContent = msg;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
+  });
+</script>
 </body>
 </html>
