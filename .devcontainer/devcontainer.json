@@ -1,0 +1,16 @@
+{
+  "name": "Node.js & Bun Dev Container",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20-bullseye",
+  "features": {
+    "ghcr.io/devcontainer-community/devcontainer-features/bun.sh:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+				"oven.bun-vscode",
+        "biomejs.biome"
+      ]
+    }
+  },
+  "postCreateCommand": "bun install"
+}
