@@ -36,7 +36,7 @@ Format for chat messages sent to the server:
 	"type": "chat_message",
 	"data": {
 		"channel": "<channel_id>",
-		"message": "<message_content>"
+		"content": "<message_content>"
 	}
 }
 ```
@@ -51,7 +51,21 @@ Format for chat messages received from the server:
 	"data": {
 		"channel": "<channel_id>",
 		"user_id": "<user_id>",
-		"message": "<message_content>"
+		"content": "<message_content>"
+	}
+}
+```
+
+## 3. Channel Creation / Management
+
+Subscribing to a channel should also create it if it does not exist.
+
+### 3.1 Subscribe to Channel
+```json
+{
+	"type": "subscribe_channel",
+	"data": {
+		"channel": "<channel_id>"
 	}
 }
 ```
