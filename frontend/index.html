@@ -31,27 +31,57 @@
             <button type="submit">Send</button>
         </form>
     </section>
-<script src="/socket.io/socket.io.js"></script>
 <script>
-    const socket = io();
-
     const form = document.getElementById('form');
     const input = document.getElementById('chat_input');
     const messages = document.getElementById('messages');
 
-    form.addEventListener('submit', (e) => {
+    
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const ws = new WebSocket('ws://localhost:3000/_ws');
+
+        ws.onmessage = (event) => {
+            console.log(event)
+            const msg = event.data;
+            const item = document.createElement('li');
+            item.textContent = msg;
+            messages.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        };
+
+        ws.onopen = () => {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket connection closed');
+        };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+         form.addEventListener('submit', (e) => {
         e.preventDefault();
         if (input.value) {
-            socket.emit('chat message', input.value);
+            ws.send(input.value);
             input.value = '';
         }
     });
-    socket.on('chat message', (msg) => {
-    const item = document.createElement('li');
-    item.textContent = msg;
-    messages.appendChild(item);
-    window.scrollTo(0, document.body.scrollHeight);
-  });
+    });
+    // const socket = io();
+
+    
+
+   
+    // socket.on('chat message', (msg) => {
+    // const item = document.createElement('li');
+    // item.textContent = msg;
+    // messages.appendChild(item);
+    // window.scrollTo(0, document.body.scrollHeight);
 </script>
 </body>
 </html>
