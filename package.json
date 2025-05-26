@@ -5,9 +5,14 @@
   "private": true,
   "devDependencies": {
     "@types/bun": "latest",
-    "@types/node": "^22.15.21"
+    "@types/node": "^22.15.21",
+    "daisyui": "^5.0.37"
   },
   "peerDependencies": {
     "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bun-plugin-tailwind": "^0.0.15",
+    "tailwindcss": "^4.1.7"
   }
 }
