@@ -35,9 +35,14 @@ const server = serve({
   websocket: { 
     message(ws: ServerWebSocket, message) {
       console.log('WebSocket message received:', ws.data.uuid, message);
-      const msg_content = JSON.parse(message.toString()).data.content;
+      const topic = JSON.parse(message.toString()).data.channel;
+      console.log('test channel: ', topic);
+      const msg_data = JSON.parse(message.toString()).data;
       // Echo the message back to the client
-      server.publish('main', `Client ${ws} says: ${msg_content}`);
+      server.publish(topic, JSON.stringify({
+        type: "chat_message",
+        data: msg_data,
+      }));
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
@@ -49,3 +54,4 @@ const server = serve({
 });
 
 console.log(`Listening on ${server.url}`);
+

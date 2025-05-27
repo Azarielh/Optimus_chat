@@ -54,7 +54,7 @@ function joinChannel(channelName: string) {
 }
 
 function sendWsMessage(message: WebSocketMessage) {
-	console.log(ws)
+	console.log(ws);
 	if (ws && ws.readyState === WebSocket.OPEN) {
 		ws.send(JSON.stringify(message));
 	} else {
