@@ -40,25 +40,15 @@ const server = serve({
       const interaction_type = JSON.parse(message.toString()).type;
 
       console.log('WebSocket message received:', ws.data.uuid, message);
-      console.log('interaction type:', JSON.parse(message.toString()).type);
       // Define action
       switch(interaction_type) {
         case 'chat_message':
-          server.publish(topic, JSON.stringify({
-            type: topic,
-            data: msg_data,
-            date: Date().toLocaleString(),
-          }));
+          msg_to_front(topic, msg_data);
           break;
         case 'subscribe_channel':
-          server.publish(topic, JSON.stringify({
-            type: topic,
-            msg: "This is a very welcoming message",
-            date: Date().toLocaleString(),
-          }));
+          msg_to_front(topic, "This is a very welcoming message");
           break;
       }
-      // Echo the message back to the client
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
@@ -72,5 +62,10 @@ const server = serve({
 console.log(`Listening on ${server.url}`);
 
 function msg_to_front(channel: string, content: string) {
-
+  server.publish(channel, JSON.stringify({
+    type: channel,
+    user: 'Optimus Prime',
+    data: content,
+    date: Date().toLocaleString(),
+  }));
 }
