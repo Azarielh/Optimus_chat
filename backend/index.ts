@@ -6,6 +6,7 @@ type WebSocketData = {
   uuid: string;
 }
 
+
 type ServerWebSocket = Bun.ServerWebSocket<WebSocketData>;
 
 // Message WebSocket = on recoit des données peu importe 
@@ -34,15 +35,29 @@ const server = serve({
 
   websocket: { 
     message(ws: ServerWebSocket, message) {
-      console.log('WebSocket message received:', ws.data.uuid, message);
       const topic = JSON.parse(message.toString()).data.channel;
-      console.log('test channel: ', topic);
       const msg_data = JSON.parse(message.toString()).data;
+      const interaction_type = JSON.parse(message.toString()).type;
+
+      console.log('WebSocket message received:', ws.data.uuid, message);
+      console.log('interaction type:', JSON.parse(message.toString()).type);
+      console.log('test channel: ', topic);
+      // Define action
+      switch(interaction_type) {
+        case 'chat_message':
+          server.publish(topic, JSON.stringify({
+            type: "chat_message",
+            data: msg_data,
+          }));
+          break;
+        case 'subscribe_channel':
+          server.publish(topic, JSON.stringify({
+            type: "chat_message",
+            msg: "This is a very welcoming message",
+          }));
+          break;
+      }
       // Echo the message back to the client
-      server.publish(topic, JSON.stringify({
-        type: "chat_message",
-        data: msg_data,
-      }));
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
@@ -54,4 +69,3 @@ const server = serve({
 });
 
 console.log(`Listening on ${server.url}`);
-
