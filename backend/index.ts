@@ -41,19 +41,20 @@ const server = serve({
 
       console.log('WebSocket message received:', ws.data.uuid, message);
       console.log('interaction type:', JSON.parse(message.toString()).type);
-      console.log('test channel: ', topic);
       // Define action
       switch(interaction_type) {
         case 'chat_message':
           server.publish(topic, JSON.stringify({
-            type: "chat_message",
+            type: topic,
             data: msg_data,
+            date: Date().toLocaleString(),
           }));
           break;
         case 'subscribe_channel':
           server.publish(topic, JSON.stringify({
-            type: "chat_message",
+            type: topic,
             msg: "This is a very welcoming message",
+            date: Date().toLocaleString(),
           }));
           break;
       }
@@ -69,3 +70,7 @@ const server = serve({
 });
 
 console.log(`Listening on ${server.url}`);
+
+function msg_to_front(channel: string, content: string) {
+
+}
