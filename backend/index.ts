@@ -35,8 +35,9 @@ const server = serve({
   websocket: { 
     message(ws: ServerWebSocket, message) {
       console.log('WebSocket message received:', ws.data.uuid, message);
+      const msg_content = JSON.parse(message.toString()).data.content;
       // Echo the message back to the client
-      server.publish('main', `Client ${ws} says: ${message}`);
+      server.publish('main', `Client ${ws} says: ${msg_content}`);
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
