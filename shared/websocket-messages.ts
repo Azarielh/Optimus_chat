@@ -1,4 +1,4 @@
-export type WebSocketPayload<T extends string, D> = {
+export type WebSocketPayload<T extends string, D extends Record<string, any>> = {
 	type: T;
 	data: D;
 }
@@ -14,9 +14,19 @@ export type ChatMessagePayload = WebSocketPayload<'chat_message', {
 	date: Date;
 }>;
 
+export function isChatMessagePayload(payload: WebSocketPayload<string, any>): payload is ChatMessagePayload {
+	return ('channel' in payload.data) && typeof payload.data.channel === 'string' &&
+		('content' in payload.data) && typeof payload.data.content === 'string' &&
+		('user' in payload.data) && typeof payload.data.user === 'string' &&
+		('date' in payload.data) && payload.data.date instanceof Date;
+}
 
 export type SubscribeChannelPayload = WebSocketPayload<'subscribe_channel', {
 	channel: string;
 }>;
+
+export function isSubscribeChannelPayload(payload: WebSocketPayload<string, any>): payload is SubscribeChannelPayload {
+	return ('channel' in payload.data) && typeof payload.data.channel === 'string';
+}
 
 export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload
