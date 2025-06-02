@@ -1,8 +1,10 @@
 # Use official Bun image
-FROM oven/bun:1.1.13
+FROM oven/bun:1.2.14
 
 # Set working directory
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 # Copy package and lock files
 COPY bun.lock bunfig.toml package.json ./
@@ -13,12 +15,8 @@ COPY . .
 # Install dependencies
 RUN bun install
 
-# Build frontend (if needed)
-RUN bun run build || echo "No build script, skipping build"
-
 # Expose port (default Bun port is 3000, change if needed)
 EXPOSE 3000
 
-# Start the backend server
-ENV NODE_ENV=production
+# Start the application
 CMD ["bun", "run", "backend/index.ts"]
