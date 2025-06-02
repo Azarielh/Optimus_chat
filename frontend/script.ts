@@ -1,33 +1,15 @@
+import type { ChatMessagePayload, SubscribeChannelPayload, WebSocketMessagePayload, WebSocketPayload } from "../shared/websocket-messages";
+
 let ws: WebSocket | null = null;
 
-type WebSocketMessage = {
-	type: string;
-	data: any;
-}
-
-type ChatMessageData = {
-	channel: string;
-	content: string;
-}
-
-type ChatMessageWebSocketMessage = {
-	type: 'chat_message';
-	data: ChatMessageData;
-}
-
-type JoinChannelWebSocketMessage = {
-	type: 'subscribe_channel';
-	data: {
-		channel: string;
-	};
-}
-
 function sendChatMessage(channel: string, content: string) {
-	const message: ChatMessageWebSocketMessage = {
+	const message: ChatMessagePayload = {
 		type: 'chat_message',
 		data: {
 			channel,
-			content
+			content,
+			user: 'User1', // Replace with actual user identifier
+			date: new Date()
 		}
 	};
 
@@ -42,7 +24,7 @@ function onJoinChannelButtonClick() {
 }
 
 function joinChannel(channelName: string) {
-	const message: JoinChannelWebSocketMessage = {
+	const message: SubscribeChannelPayload = {
 		type: 'subscribe_channel',
 		data: {
 			channel: channelName
@@ -53,7 +35,7 @@ function joinChannel(channelName: string) {
 	console.log(`Joining channel: ${channelName}`);
 }
 
-function sendWsMessage(message: WebSocketMessage) {
+function sendWsMessage(message: WebSocketMessagePayload) {
 	console.log(ws);
 	if (ws && ws.readyState === WebSocket.OPEN) {
 		ws.send(JSON.stringify(message));

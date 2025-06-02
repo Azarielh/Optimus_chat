@@ -1,6 +1,6 @@
 {
   "name": "optimus_chat",
-  "module": "index.ts",
+  "module": "backend/index.ts",
   "type": "module",
   "private": true,
   "devDependencies": {
@@ -12,7 +12,10 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
+    "@types/react-dom": "^19.1.5",
     "bun-plugin-tailwind": "^0.0.15",
+    "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.7"
   }
 }

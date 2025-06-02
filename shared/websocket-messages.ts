@@ -3,7 +3,7 @@ export type WebSocketPayload<T extends string, D extends Record<string, any>> = 
 	data: D;
 }
 
-export function isWebSocketPayload<T extends string, D>(payload: any, type: T): payload is WebSocketPayload<T, D> {
+export function isWebSocketPayload<T extends string, D extends Record<string, any>>(payload: any, type: T): payload is WebSocketPayload<T, D> {
 	return payload && payload.type === type && typeof payload.data === 'object';
 }
 
