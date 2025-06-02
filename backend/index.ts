@@ -6,7 +6,6 @@ type WebSocketData = {
   uuid: string;
 }
 
-
 type ServerWebSocket = Bun.ServerWebSocket<WebSocketData>;
 
 // Message WebSocket = on recoit des données peu importe 
@@ -14,11 +13,11 @@ type ServerWebSocket = Bun.ServerWebSocket<WebSocketData>;
 
 // https://bun.sh/docs/bundler/fullstack
 const server = serve({
-  development: true,
+  development: process.env.NODE_ENV !== "production",
 
   routes: {
     "/": homepage,
-    "/_ws": (req, res) => {
+    "/_ws": (req) => {
       // Meta-data
       const data: WebSocketData = {
         createdAt: Date.now(),
