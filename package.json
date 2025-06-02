@@ -3,6 +3,11 @@
   "module": "backend/index.ts",
   "type": "module",
   "private": true,
+  "scripts": {
+    "dev": "bun run backend/index.ts",
+    "build": "bun build --minify --sourcemap backend/index.ts --target=bun --outdir dist",
+    "start": "bun run dist/index.js"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^22.15.21",
