@@ -1,6 +1,8 @@
 import { useCallback, useContext, useRef } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import type { ChatMessagePayload } from "../../../shared/websocket-messages";
+import { FaFileImage, FaPaperPlane } from "react-icons/fa";
+import { FaCirclePlus, FaFaceSmileWink, FaFileCirclePlus } from "react-icons/fa6";
 
 function ChatHeader(props: { channelId: string }) {
 	return (
@@ -52,7 +54,6 @@ function MessageList() {
 	);
 }
 
-
 function ChatInput() {
 	const chatContext = useContext(ChatContext);
 
@@ -68,8 +69,17 @@ function ChatInput() {
 
 	return (
 		<form className="flex gap-2" onSubmit={handleSubmit}>
+			<label className="btn btn-square btn-ghost cursor-pointer">
+				<FaCirclePlus />
+				<input type="file" className="hidden" />
+			</label>
 			<input type="text" ref={inputRef} className="input input-bordered flex-1" placeholder="Type your message here..." required />
-			<button type="submit" className="btn btn-primary">Send</button>
+			<button type="button" className="btn btn-square btn-ghost">
+				<FaFaceSmileWink />
+			</button>
+			<button type="submit" className="btn btn-primary btn-square">
+				<FaPaperPlane />
+			</button>
 		</form>
 	);
 }
