@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import homepage from "../frontend/index.html";
-import { isChatMessagePayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages";
+import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages";
 
 type WebSocketData = {
   createdAt: number;
@@ -60,7 +60,10 @@ const server = serve({
 
         // TODO: 
         // - Checker si la payload est valide
-        
+        if (!isSubscribeChannelPayload(payload)) {
+          console.error('Invalid Channel payload : ' , payload);
+          return;
+        }
         // - Ajouter le channel à la liste des channels
         // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
         // - Envoyer un message de bienvenue
@@ -72,8 +75,8 @@ const server = serve({
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
+      msg_to_front('main', "This is a very welcoming message", 'System');
       ws.subscribe('main'); // subscribe to a channel
-      ws.send('Welcome to the WebSocket server!'); // send a welcome message
     }, // a socket is opened
     close(ws: ServerWebSocket, code, message) {}, // a socket is closed
   }
