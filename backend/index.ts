@@ -1,6 +1,8 @@
 import { serve } from "bun";
 import homepage from "../frontend/index.html";
 import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages";
+import { Channel } from "./channel.ts";
+import { ChannelManager } from "./channelManager.ts";
 
 type WebSocketData = {
   createdAt: number;
@@ -46,6 +48,7 @@ const server = serve({
       const type = payload.type;
       
       console.log('WebSocket message received:', ws.data.uuid, message);
+
       // Define action
       switch(type) {
         case 'chat_message':
@@ -57,15 +60,17 @@ const server = serve({
           send_msg(payload.data.channel, payload.data.content, ws.data.uuid);
           break;
         case 'subscribe_channel':
-
         // TODO: 
         // - Checker si la payload est valide
         if (!isSubscribeChannelPayload(payload)) {
           console.error('Invalid Channel payload : ' , payload);
           return;
         }
+		// Check if new server and if so Add to ChannelManager and create new Channel object
+        if (ChannelManager.isNew(payload.data.channel))
+        	send_msg(payload.data.channel, "This is a very welcoming message", 'System');
+  
         // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
-        // - Envoyer un message de bienvenue
           send_msg(payload.data.channel, "This is a very welcoming message", 'System');
 
           // - Ajouter le channel à la liste des channels
