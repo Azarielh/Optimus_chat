@@ -15,7 +15,6 @@ function MessageBubble(props: { message: ChatMessagePayload['data'] }) {
 
 	return (
 		<li className="flex items-start gap-2">
-
 			<div className="flex-1">
 				<div className="font-semibold">{props.message.user}</div>
 				<div>{props.message.content}</div>
