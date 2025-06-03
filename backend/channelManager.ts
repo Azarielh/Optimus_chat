@@ -1,7 +1,7 @@
 import { Channel } from "./channel.ts";
 
 export class ChannelManager {
-    private channels: Map<string, Channel> = new Map();
+    public channels: Map<string, Channel> = new Map();
 
     isNew(name: string): boolean {
         if(!this.channels.has(name)) {

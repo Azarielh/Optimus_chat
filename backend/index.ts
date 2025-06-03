@@ -4,13 +4,14 @@ import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, ty
 import { Channel } from "./channel.ts";
 import { ChannelManager } from "./channelManager.ts";
 
+
 type WebSocketData = {
   createdAt: number;
   uuid: string;
 }
 
 type ServerWebSocket = Bun.ServerWebSocket<WebSocketData>;
-
+const ChannelList = new ChannelManager; 
 // Message WebSocket = on recoit des données peu importe 
 // Chat Message = un message de chat, on peut le publier sur un channel
 
@@ -67,9 +68,9 @@ const server = serve({
           return;
         }
 		// Check if new server and if so Add to ChannelManager and create new Channel object
-        if (ChannelManager.isNew(payload.data.channel))
+        if (ChannelList.isNew(payload.data.channel))
         	send_msg(payload.data.channel, "This is a very welcoming message", 'System');
-		console.log (ChannelManager.channels);
+		console.log (ChannelList.channels);
         // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
           send_msg(payload.data.channel, "This is a very welcoming message", 'System');
 
