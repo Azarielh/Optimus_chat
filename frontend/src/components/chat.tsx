@@ -1,8 +1,8 @@
-import { useCallback, useContext, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import type { ChatMessagePayload } from "../../../shared/websocket-messages";
-import { FaFileImage, FaPaperPlane } from "react-icons/fa";
-import { FaCirclePlus, FaFaceSmileWink, FaFileCirclePlus } from "react-icons/fa6";
+import { FaPaperPlane } from "react-icons/fa";
+import { FaCirclePlus, FaFaceSmileWink } from "react-icons/fa6";
 
 function ChatHeader(props: { channelId: string }) {
 	return (
@@ -45,11 +45,19 @@ function MessageList() {
 
 	const messages = chatContext.channels.get(chatContext.currentChannel)?.messages || [];
 
+	const messagesEndRef = useRef<HTMLDivElement>(null);
+
+	// Scroll to bottom when messages change
+	useEffect(() => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [messages.length]);
+
 	return (
 		<ul id="messages" className="space-y-4">
 			{messages.map((message, index) => (
 				<MessageBubble key={index} message={message} />
 			))}
+			<div ref={messagesEndRef} />
 		</ul>
 	);
 }
@@ -90,7 +98,7 @@ export function Chat() {
 	return (
 		<div className="flex-1 flex flex-col h-full">
 			<ChatHeader channelId={chatContext.currentChannel} />
-			<div className="flex-1 p-4">
+			<div className="flex-1 p-4 overflow-y-auto">
 				<MessageList />
 			</div>
 			<div className="p-4 border-t border-base-300">
