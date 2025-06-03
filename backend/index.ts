@@ -54,7 +54,7 @@ const server = serve({
             return;
           }
           console.log('Chat message received:', payload.data);
-          msg_to_front(payload.data.channel, payload.data.content, ws.data.uuid);
+          send_msg(payload.data.channel, payload.data.content, ws.data.uuid);
           break;
         case 'subscribe_channel':
 
@@ -64,18 +64,20 @@ const server = serve({
           console.error('Invalid Channel payload : ' , payload);
           return;
         }
-        // - Ajouter le channel à la liste des channels
         // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
         // - Envoyer un message de bienvenue
+          send_msg(payload.data.channel, "This is a very welcoming message", 'System');
 
-          msg_to_front(payload.data.channel, "This is a very welcoming message", 'System');
+          // - Ajouter le channel à la liste des channels
           ws.subscribe(payload.data.channel);
+          send_msg(payload.data.channel, `${ws.data.uuid} à rejoint le channel`, 'System');
+
           break;
       }
     }, // a message is received
     open(ws: ServerWebSocket) {
       console.log('WebSocket opened:', ws.data.uuid);
-      msg_to_front('main', "This is a very welcoming message", 'System');
+      send_msg('main', "This is a very welcoming message", 'System');
       ws.subscribe('main'); // subscribe to a channel
     }, // a socket is opened
     close(ws: ServerWebSocket, code, message) {}, // a socket is closed
@@ -84,7 +86,7 @@ const server = serve({
 
 console.log(`Listening on ${server.url}`);
 
-function msg_to_front(channel: string, content: string, user: string) {
+function send_msg(channel: string, content: string, user: string) {
 
   const message: ChatMessagePayload = {
     type: 'chat_message',
