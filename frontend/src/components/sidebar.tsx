@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { ChatContext } from "../contexts/chat-context";
+import { JoinChannelButton } from "./join-channel-button";
 
 function SidebarHeader() {
 	return (
@@ -38,23 +39,6 @@ function ChannelList() {
 				<ChannelListItem key={channel.id} channelId={channel.id} />
 			))}
 		</ul>
-	);
-}
-
-function JoinChannelButton() {
-	const chatContext = useContext(ChatContext);
-
-	const onClick = () => {
-		const newChannelId = prompt("Enter channel ID to join:");
-		if (newChannelId) {
-			chatContext.subscribeChannel(newChannelId);
-		}
-	}
-
-	return (
-		<button onClick={onClick} className="btn btn-primary w-full" id="join_channel_button">
-			Join Channel
-		</button>
 	);
 }
 
