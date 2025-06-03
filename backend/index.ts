@@ -1,5 +1,6 @@
 import { serve } from "bun";
 import homepage from "../frontend/index.html";
+import { isChatMessagePayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages";
 
 type WebSocketData = {
   createdAt: number;
@@ -34,18 +35,35 @@ const server = serve({
 
   websocket: { 
     message(ws: ServerWebSocket, message) {
-      const topic = JSON.parse(message.toString()).data.channel;
-      const msg_data = JSON.parse(message.toString()).data;
-      const interaction_type = JSON.parse(message.toString()).type;
 
+      const payload = JSON.parse(message.toString());
+
+      if (!isWebSocketPayload(payload)) {
+        console.error('Invalid WebSocket payload:', payload);
+        return;
+      }
+
+      const type = payload.type;
+      
       console.log('WebSocket message received:', ws.data.uuid, message);
       // Define action
-      switch(interaction_type) {
+      switch(type) {
         case 'chat_message':
-          msg_to_front(topic, msg_data);
+          if (!isChatMessagePayload(payload)) {
+            console.error('Invalid chat message payload:', payload);
+            return;
+          }
+          console.log('Chat message received:', payload.data);
+          msg_to_front(payload.data.channel, payload.data.content, ws.data.uuid);
           break;
         case 'subscribe_channel':
-          msg_to_front(topic, "This is a very welcoming message");
+
+        // TODO: 
+        // - Checker si la payload est valide
+        // - Ajouter le channel à la liste des channels
+        // - Envoyer un message de bienvenue
+
+          msg_to_front(payload.data.channel, "This is a very welcoming message", 'System');
           break;
       }
     }, // a message is received
@@ -60,11 +78,17 @@ const server = serve({
 
 console.log(`Listening on ${server.url}`);
 
-function msg_to_front(channel: string, content: string) {
-  server.publish(channel, JSON.stringify({
-    type: channel,
-    user: 'Optimus Prime',
-    data: content,
-    date: Date().toLocaleString(),
-  }));
+function msg_to_front(channel: string, content: string, user: string) {
+
+  const message: ChatMessagePayload = {
+    type: 'chat_message',
+    data: {
+      channel: channel,
+      content: content,
+      date: new Date().toISOString(),
+      user: user,
+    },
+  };
+
+  server.publish(channel, JSON.stringify(message));
 }
