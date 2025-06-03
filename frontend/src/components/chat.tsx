@@ -13,15 +13,27 @@ function ChatHeader(props: { channelId: string }) {
 function MessageBubble(props: { message: ChatMessagePayload['data'] }) {
 	const date = new Date(props.message.date);
 
+	const getInitials = (name: string) => {
+		const names = name.split("-");
+		if (names.length === 0) return "?";
+		if (names.length === 1 && names[0]) return names[0][0]?.toUpperCase() ?? "?";
+		const firstInitial = names[0]?.[0] ?? "";
+		const lastInitial = names[names.length - 1]?.[0] ?? "";
+		return (firstInitial + lastInitial).toUpperCase() || "?";
+	};
+
 	return (
-		<li className="flex items-start gap-2">
-			<div className="flex-1">
-				<div className="font-semibold">{props.message.user}</div>
-				<div>{props.message.content}</div>
+		<li className="chat chat-start">
+			<div className="chat-image avatar avatar-placeholder">
+				<div className="bg-neutral text-neutral-content w-12	 rounded-full">
+					<span className="text-xl">{getInitials(props.message.user)}</span>
+				</div>
 			</div>
-			<div className="text-xs text-gray-500">
-				{date.toLocaleDateString()} {date.toLocaleTimeString()}
+			<div className="chat-header">
+				{props.message.user}
+				<time className="text-xs opacity-50"> {date.toLocaleTimeString('fr-FR')} </time>
 			</div>
+			<div className="chat-bubble">{props.message.content}</div>
 		</li>
 	);
 }
