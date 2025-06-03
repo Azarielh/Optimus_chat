@@ -58,7 +58,7 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 	// WebSocket setup
 	useEffect(() => {
 		const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-		const ws = new WebSocket(`${protocol}://${window.location.hostname}:3000/_ws`);
+		const ws = new WebSocket(`${protocol}://${window.location.hostname}:${window.location.port}/_ws`);
 		wsRef.current = ws;
 
 		ws.onmessage = (event) => {
