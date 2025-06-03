@@ -6,7 +6,7 @@ import { FaCirclePlus, FaFaceSmileWink } from "react-icons/fa6";
 
 function ChatHeader(props: { channelId: string }) {
 	return (
-		<div className="w-full p-2 border-b border-base-300">
+		<div className="h-11 w-full p-2 border-b border-base-300">
 			<h2 className="text-lg font-semibold">#{props.channelId}</h2>
 		</div>
 	);

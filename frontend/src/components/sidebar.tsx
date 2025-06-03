@@ -1,15 +1,18 @@
 import { useContext } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import { JoinChannelButton } from "./join-channel-button";
+import { GiChatBubble } from "react-icons/gi";
 
 function SidebarHeader() {
 	return (
-		<div className="h-12 flex items-center justify-center ">
-			<h1 className="text-xl font-bold">Optimus Chat</h1>
+		<div className="h-11 flex items-center justify-center">
+			<h1 className="font-bold">
+				<GiChatBubble className="inline-block mr-2 text-primary" />
+				Optimus Chat
+			</h1>
 		</div>
 	);
 }
-
 
 function ChannelListItem({ channelId }: { channelId: string }) {
 	const chatContext = useContext(ChatContext);
@@ -43,12 +46,13 @@ function ChannelList() {
 }
 
 export function Sidebar() {
-
 	return (
-		<div className="w-56 flex flex-col bg-base-200 p-4">
+		<div className="w-56 flex flex-col bg-base-200">
 			<SidebarHeader />
-			<ChannelList />
-			<JoinChannelButton />
+			<div className="flex-1 flex flex-col p-4">
+				<ChannelList />
+				<JoinChannelButton />
+			</div>
 		</div>
 	);
 }
