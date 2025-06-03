@@ -61,6 +61,7 @@ const server = serve({
         // TODO: 
         // - Checker si la payload est valide
         // - Ajouter le channel à la liste des channels
+        // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
         // - Envoyer un message de bienvenue
 
           msg_to_front(payload.data.channel, "This is a very welcoming message", 'System');

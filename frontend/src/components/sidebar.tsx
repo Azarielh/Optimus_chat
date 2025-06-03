@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { ChatContext } from "../contexts/chat-context";
 
 function SidebarHeader() {
 	return (
@@ -7,28 +9,50 @@ function SidebarHeader() {
 	);
 }
 
+
+function ChannelListItem({ channelId }: { channelId: string }) {
+	const chatContext = useContext(ChatContext);
+
+	const onClick = () => {
+		chatContext.setCurrentChannel(channelId);
+	}
+
+	return (
+		<li className="menu-item">
+			<button onClick={onClick} className="flex items-center gap-1">
+				<span className="text-base-content/40">#</span>
+				<span>{channelId}</span>
+			</button>
+		</li>
+	);
+}
+
 function ChannelList() {
+	const chatContext = useContext(ChatContext);
+
+	const channels = Array.from(chatContext.channels.values())
+
 	return (
 		<ul className="menu w-full flex-1">
-			<li>
-				<a href="#" className="flex items-center gap-1">
-					<span className="text-base-content/40">#</span>
-					<span>main</span>
-				</a>
-			</li>
-			<li>
-				<a href="#" className="flex items-center gap-1">
-					<span className="text-base-content/40">#</span>
-					<span>memes</span>
-				</a>
-			</li>
+			{channels.map(channel => (
+				<ChannelListItem key={channel.id} channelId={channel.id} />
+			))}
 		</ul>
 	);
 }
 
 function JoinChannelButton() {
+	const chatContext = useContext(ChatContext);
+
+	const onClick = () => {
+		const newChannelId = prompt("Enter channel ID to join:");
+		if (newChannelId) {
+			chatContext.subscribeChannel(newChannelId);
+		}
+	}
+
 	return (
-		<button className="btn btn-primary w-full" id="join_channel_button">
+		<button onClick={onClick} className="btn btn-primary w-full" id="join_channel_button">
 			Join Channel
 		</button>
 	);
