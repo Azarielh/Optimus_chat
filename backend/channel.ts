@@ -1,5 +1,5 @@
-import type { ServerWebSocket } from "bun";
 import type { ChatMessagePayload } from "../shared/websocket-messages";
+import type { ServerWebSocket } from "./index.ts";
 
 export class Channel {
 
