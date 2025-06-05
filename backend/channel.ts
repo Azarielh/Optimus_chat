@@ -11,6 +11,20 @@ export class Channel {
         this.users.set(user, ws);
     }
 
+    publish (data: ChatMessagePayload['data']) {
+
+        const payload: ChatMessagePayload = {
+            type: 'chat_message',
+            data
+        };
+
+        const payloadStr = JSON.stringify(payload);
+
+        this.users.forEach((ws) => {
+            ws.send(payloadStr);
+        })
+    }
+
     constructor(public name: string) {}
 
 }
