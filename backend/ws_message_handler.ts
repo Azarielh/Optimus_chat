@@ -1,82 +1,39 @@
 // Request Reception
 import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages.ts";
+import { channel_subscribe } from "./channel_subscribe_handler.ts";
 import { ChannelManager } from "./channelManager.ts";
 import type { ServerWebSocket } from "./index.ts";
+import { user_msg, welcome_msg} from "./new_message_handler.ts";
 
 export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer<ArrayBufferLike>) {
+
 // Initialize Channel Manager
     const Manager_Chan = ChannelManager.getInstance();
-    Manager_Chan.isNew('main', 'Assacar', ws);
-    Manager_Chan.sendo({
-        channel: 'main',
-        content: 'blabla',
-        date: new Date().toISOString(),
-        user: 'Asaccar'
-    }, 'main');
     const payload = JSON.parse(message.toString());
-	
+
+// Check is payload ( what we recieve from front is valid)
     if (!isWebSocketPayload(payload)) {
       console.error('Invalid WebSocket payload:', payload);
       return;
     }
+// Setup general const for following action
+    const this_chan = payload.data.channel;
+    const user = ws.data.uuid;
     const type = payload.type;
 
-    if (type == 'chat_message') {
-        console.log(type);
+// Send message to corresponding channel
+    if (type == 'chat_message' && isChatMessagePayload(payload)) {
+        console.log(type, ` : ${user} send a message`);
+        const msg  = payload.data.content;
+
+        user_msg(this_chan, msg, user);
     }
-    else if (type == 'subscribe_channel') {
-        console.log(type);
+// Subscribe a user to the requested channel | create it if new
+    else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload)) {
+        console.log(type, ` : ${user} join ${this_chan}`);
+        channel_subscribe(this_chan, user, ws);
     }
-      //console.log('WebSocket message received:', ws.data.uuid, message);
-
-    // Define action
-    //   switch(type) {
-    //     case 'chat_message':
-    //       if (!isChatMessagePayload(payload)) {
-    //         console.error('Invalid chat message payload:', payload);
-    //         return;
-    //       }
-    //       console.log('Chat message received:', payload.data);
-    //       send_msg(working_channel, payload.data.content, ws.data.uuid);
-    //       break;
-
-    //     case 'subscribe_channel':
-    //     // TODO: 
-    //     // - Checker si la payload est valide
-    //     if (!isSubscribeChannelPayload(payload)) {
-    //       console.error('Invalid Channel payload : ' , payload);
-    //       return;
-    //     }
-
-	// 	// Create new channel if this one doesn't
-    //     if (ChannelList.isNew(working_channel, ws.data.uuid, ws))
-    //     	send_msg(working_channel, "This is a very welcoming message", 'System');
-		
-	// 	console.log (ChannelList.channels);
-	// 	registered_channel.join(working_channel, ws.data.uuid);
-    //     // - Envoyer un payload 'subscribe_channel' en réponse à ce client (pour confirmer l'abonnement)
-
-    //       // - Ajouter le channel à la liste des channels
-    //       ws.subscribe(working_channel);
-    //       send_msg(working_channel, `${ws.data.uuid} à rejoint le channel`, 'System');
-
-    //       break;
-    //   }
 }
+
 // Parsing  / CHecking
 // Distribution
-
-function send_msg(channel: string, content: string, user: string) {
-
-  const message: ChatMessagePayload = {
-    type: 'chat_message',
-    data: {
-      channel: channel,
-      content: content,
-      date: new Date().toISOString(),
-      user: user,
-    },
-  };
-
-  server.publish(channel, JSON.stringify(message));
-}

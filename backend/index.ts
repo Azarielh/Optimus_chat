@@ -1,6 +1,5 @@
 import { serve } from "bun";
 import homepage from "../frontend/index.html";
-import { ChannelManager } from "./channelManager.ts";
 import { ws_message_handler } from "./ws_message_handler.ts";
 
 
@@ -32,15 +31,11 @@ const server = serve({
     }
   },
 
-// Quand on reçoit un msg ws
-//______________________________________________________
-
   websocket: { 
     message: ws_message_handler,
     open(ws: ServerWebSocket) {
-      console.log('WebSocket opened:', ws.data.uuid);
-      //send_msg('main', "This is a very welcoming message", 'System');
-      ws.subscribe('main'); // subscribe to a channel
+      	console.log('WebSocket opened:', ws.data.uuid);
+      	ws.subscribe('main'); // subscribe to a channel
     }, // a socket is opened
     close(ws: ServerWebSocket, code, message) {}, // a socket is closed
   }
