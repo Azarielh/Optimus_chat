@@ -23,24 +23,20 @@ export class ChannelManager {
         return (this.channels.get(channel));
     }
 
-    isNew(name: string, user: string, ws: ServerWebSocket): boolean {
-        if(!this.channels.has(name)) {
-            this.channels.set(name, new Channel(name));
-            this.channels.get(name)!.join(ws, user);
-            return (true);
-        } else {
-            console.log (`>> ${name} already exist or an error occured during the attempt`)
-            return false;
-        }
-    }
-
     subscribe(channel: string, user: string, ws: ServerWebSocket) {
         const this_chan = this.get_or_build(channel);
-        if (this_chan)
+        if (this_chan) {
             this_chan.join(ws, user);
-        else console.error(`Subscribe : An error occured while attempting to join this ${channel}`)
+            this_chan.give_list(ws);
+        }
+        else console.error(`Subscribe : An error occured while attempting to join this ${channel}`);
     }
 
+    unsuscribe(channel: string, user: string) {
+        const this_chan = this.get_or_build(channel);
+        if (this_chan)
+            this_chan.quit(user)
+    }
     sendo(data: typo.ChatMessagePayload['data']) {
         this.channels.get(data.channel)!.publish(data);
     }

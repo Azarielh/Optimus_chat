@@ -11,6 +11,9 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     const Manager_Chan = ChannelManager.getInstance();
     const payload = JSON.parse(message.toString());
 
+//_____________________  Parsing  / Checking  _________________________
+
+
 // Check is payload ( what we recieve from front is valid)
     if (!isWebSocketPayload(payload)) {
       console.error('Invalid WebSocket payload:', payload);
@@ -20,6 +23,9 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     const this_chan = payload.data.channel;
     const user = ws.data.uuid;
     const type = payload.type;
+
+//_____________________  Distribution  _________________________
+
 
 // Send message to corresponding channel
     if (type == 'chat_message' && isChatMessagePayload(payload)) {
@@ -35,5 +41,4 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     }
 }
 
-// Parsing  / CHecking
-// Distribution
+

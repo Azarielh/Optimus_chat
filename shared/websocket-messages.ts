@@ -29,4 +29,14 @@ export function isSubscribeChannelPayload(payload: WebSocketPayload<string, any>
 	return ('channel' in payload.data) && typeof payload.data.channel === 'string';
 }
 
-export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload
+export type UsersListPayload = WebSocketPayload<'Users_list', {
+	channel: string;
+	users: string;
+}>;
+
+export function isUsersListPayload(payload: WebSocketPayload<string, any>): payload is UsersListPayload {
+	return ('channel' in payload.data) && typeof payload.data.channel === 'string' &&
+		('users' in payload.data) && typeof payload.data.user === 'string';
+}
+
+export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload | UsersListPayload
