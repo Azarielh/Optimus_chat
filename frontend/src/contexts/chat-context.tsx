@@ -73,9 +73,9 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 					addMessageToChannel(payload.data.channel, payload);
 				}
 
-				console.warn('Received unknown WebSocket message:', payload);
+				console.warn('🤕 Received unknown WebSocket message:', payload);
 			} catch (e) {
-				console.error('Error parsing WebSocket message:', e);
+				console.error('💥 Error parsing WebSocket message:', e);
 			}
 		};
 		ws.onopen = () => {
