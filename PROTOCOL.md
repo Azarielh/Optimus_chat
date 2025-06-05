@@ -69,3 +69,11 @@ Subscribing to a channel should also create it if it does not exist.
 	}
 }
 ```
+### 3.2 Send User list to front
+```json
+{
+	"type": "Users_list",
+	"channel": "channel_id",
+	"users": "user_id"
+}
+```
