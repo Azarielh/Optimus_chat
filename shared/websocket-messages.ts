@@ -31,12 +31,12 @@ export function isSubscribeChannelPayload(payload: WebSocketPayload<string, any>
 
 export type UsersListPayload = WebSocketPayload<'Users_list', {
 	channel: string;
-	users: string;
+	users: string[];
 }>;
 
 export function isUsersListPayload(payload: WebSocketPayload<string, any>): payload is UsersListPayload {
 	return ('channel' in payload.data) && typeof payload.data.channel === 'string' &&
-		('users' in payload.data) && typeof payload.data.user === 'string';
+		('users' in payload.data)  && Array.isArray(payload.data.users)
 }
 
 export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload | UsersListPayload

@@ -1,8 +1,9 @@
-import { useCallback, useContext, useEffect, useRef } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import type { ChatMessagePayload } from "../../../shared/websocket-messages";
 import { FaPaperPlane } from "react-icons/fa";
 import { FaCirclePlus, FaFaceSmileWink } from "react-icons/fa6";
+import { UserList } from "./user-list";
 
 function ChatHeader(props: { channelId: string }) {
 	return (
@@ -95,15 +96,21 @@ function ChatInput() {
 export function Chat() {
 	const chatContext = useContext(ChatContext);
 
+	const [isUserListOpen, setIsUserListOpen] = useState(true);
+
 	return (
-		<div className="flex-1 flex flex-col h-full">
-			<ChatHeader channelId={chatContext.currentChannel} />
-			<div className="flex-1 p-4 overflow-y-auto">
-				<MessageList />
+		<>
+			<div className="flex-1 flex flex-col h-full">
+				<ChatHeader channelId={chatContext.currentChannel} />
+				<div className="flex-1 p-4 overflow-y-auto">
+					<MessageList />
+				</div>
+				<div className="p-4 border-t border-base-300">
+					<ChatInput />
+				</div>
 			</div>
-			<div className="p-4 border-t border-base-300">
-				<ChatInput />
-			</div>
-		</div>
+			<UserList users={chatContext.channels.get(chatContext.currentChannel)?.users || []} isOpen={isUserListOpen} onToggle={() => setIsUserListOpen(!isUserListOpen)} />
+		</>
+
 	);
 }

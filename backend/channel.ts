@@ -36,11 +36,11 @@ export class Channel {
     give_list(ws: ServerWebSocket): boolean {
         const payload: UsersListPayload = {
             type:   'Users_list',
-            data: {
-                channel: this.name,
-                users:  'Optimus Prime, ' + Array.from(this.users.keys()),
-            }
+            channel: this.name,
+            users:  'Optimus Prime, ' + Array.from(this.users.keys()),
         };
+
+        
         const payloadStr = JSON.stringify(payload);
         this.users.forEach((users) => {
             users.send(payloadStr);
