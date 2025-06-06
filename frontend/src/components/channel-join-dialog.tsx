@@ -34,7 +34,7 @@ export function ChannelJoinDialog({ isOpen, setIsOpen, onJoinChannel }: ChannelJ
 						</Button>
 					</div>
 
-					<Description className={"text-xs mt-6"}>Enter the name of the channel you wish to join. If it doesn't exist, it will be created.</Description>
+					<Description className={"mt-6"}>Enter the name of the channel you wish to join. If it doesn't exist, it will be created.</Description>
 
 					<form
 						onSubmit={onSubmit}
@@ -44,6 +44,7 @@ export function ChannelJoinDialog({ isOpen, setIsOpen, onJoinChannel }: ChannelJ
 							placeholder="Channel Name"
 							className="input w-full mt-4"
 							ref={inputRef}
+							autoFocus
 							required
 						/>
 						<div className="modal-action mt-4 flex gap-2">
