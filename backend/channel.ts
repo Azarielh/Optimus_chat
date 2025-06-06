@@ -34,11 +34,15 @@ export class Channel {
     }
 
     give_list(ws: ServerWebSocket): boolean {
-        const payload = {
+        const payload: UsersListPayload = {
             type:   'Users_list',
-            channel: this.name,
-            users:  'Optimus Prime, ' + Array.from(this.users.keys()),
+            data: {
+                channel: this.name,
+                users: this.users.keys().toArray()
+            }
         };
+
+        
         const payloadStr = JSON.stringify(payload);
         ws.send(payloadStr);
         console.log('give_list :',  payloadStr);
