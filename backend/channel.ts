@@ -30,22 +30,26 @@ export class Channel {
 
         this.users.forEach((ws) => {
             ws.send(payloadStr);
-        })
+        });
     }
 
     give_list(ws: ServerWebSocket): boolean {
-        const payload = {
+        const payload: UsersListPayload = {
             type:   'Users_list',
-            channel: this.name,
-            users:  'Optimus Prime, ' + Array.from(this.users.keys()),
+            data: {
+                channel: this.name,
+                users:  'Optimus Prime, ' + Array.from(this.users.keys()),
+            }
         };
         const payloadStr = JSON.stringify(payload);
-        ws.send(payloadStr);
+        this.users.forEach((users) => {
+            users.send(payloadStr);
+        });
         console.log('give_list :',  payloadStr);
 
         return !!payloadStr;
     }
-
+ 
     constructor(public name: string) {}
 
 }
