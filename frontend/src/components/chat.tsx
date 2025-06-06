@@ -1,14 +1,32 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import type { ChatMessagePayload } from "../../../shared/websocket-messages";
-import { FaPaperPlane } from "react-icons/fa";
+import { FaPaperPlane, FaUsers, FaUsersSlash } from "react-icons/fa";
 import { FaCirclePlus, FaFaceSmileWink } from "react-icons/fa6";
-import { UserList } from "./user-list";
+import { UserListPanel } from "./user-list";
+import { UserAvatar } from "./user-avatar";
+import { useLocalStorage } from "usehooks-ts";
+
+function ToggleUserListButton() {
+	const [userListOpen, setUserListOpen] = useLocalStorage<boolean>("chat:user-list:open", true);
+
+	return (
+		<div className="tooltip tooltip-left" data-tip={userListOpen ? "Hide user list" : "Show user list"}>
+			<button className="btn btn-ghost btn-square" onClick={() => setUserListOpen(!userListOpen)}>
+				{userListOpen ? <FaUsersSlash className="text-xl" /> : <FaUsers className="text-xl" />}
+			</button>
+		</div>
+	);
+}
 
 function ChatHeader(props: { channelId: string }) {
+
 	return (
-		<div className="h-11 w-full p-2 border-b border-base-300">
+		<div className="h-11 w-full p-2 border-b border-base-300 flex items-center justify-between">
 			<h2 className="text-lg font-semibold">#{props.channelId}</h2>
+			<div className="flex items-center gap-2">
+				<ToggleUserListButton />
+			</div>
 		</div>
 	);
 }
@@ -16,22 +34,12 @@ function ChatHeader(props: { channelId: string }) {
 function MessageBubble(props: { message: ChatMessagePayload['data'] }) {
 	const date = new Date(props.message.date);
 
-	const getInitials = (name: string) => {
-		const names = name.split("-");
-		if (names.length === 0) return "?";
-		if (names.length === 1 && names[0]) return names[0][0]?.toUpperCase() ?? "?";
-		const firstInitial = names[0]?.[0] ?? "";
-		const lastInitial = names[names.length - 1]?.[0] ?? "";
-		return (firstInitial + lastInitial).toUpperCase() || "?";
-	};
-
 	return (
 		<li className="chat chat-start">
-			<div className="chat-image avatar avatar-placeholder">
-				<div className="bg-neutral text-neutral-content w-12	 rounded-full">
-					<span className="text-xl">{getInitials(props.message.user)}</span>
-				</div>
+			<div className="chat-image">
+				<UserAvatar user={props.message.user} />
 			</div>
+
 			<div className="chat-header">
 				{props.message.user}
 				<time className="text-xs opacity-50"> {date.toLocaleTimeString('fr-FR')} </time>
@@ -96,7 +104,7 @@ function ChatInput() {
 export function Chat() {
 	const chatContext = useContext(ChatContext);
 
-	const [isUserListOpen, setIsUserListOpen] = useState(true);
+	const [userListOpen] = useLocalStorage<boolean>("chat:user-list:open", true);
 
 	return (
 		<>
@@ -109,8 +117,7 @@ export function Chat() {
 					<ChatInput />
 				</div>
 			</div>
-			<UserList users={chatContext.channels.get(chatContext.currentChannel)?.users || []} isOpen={isUserListOpen} onToggle={() => setIsUserListOpen(!isUserListOpen)} />
+			<UserListPanel isOpen={userListOpen} />
 		</>
-
 	);
 }
