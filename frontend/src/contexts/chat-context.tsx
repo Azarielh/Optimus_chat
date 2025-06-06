@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useRef, useCallback } from 'react';
-import { isChatMessagePayload, isWebSocketPayload, type ChatMessagePayload } from '../../../shared/websocket-messages';
+import { isChatMessagePayload, isUsersListPayload, isWebSocketPayload, type ChatMessagePayload } from '../../../shared/websocket-messages';
 
 
 export type ChatContextChannel = {
 	id: string;
+	users: string[];
 	messages: ChatMessagePayload['data'][];
 }
 
@@ -39,7 +40,7 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 	const [channels, setChannels] = useState<Map<string, ChatContextChannel>>(
 		() => new Map([[
 			'main',
-			{ id: 'main', messages: [] }
+			{ id: 'main', messages: [], users: [] }
 		]])
 	);
 	const wsRef = useRef<WebSocket | null>(null);
@@ -48,8 +49,18 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 	const addMessageToChannel = useCallback((channelId: string, message: ChatMessagePayload) => {
 		setChannels(prev => {
 			const newMap = new Map(prev);
-			const channel = newMap.get(channelId) || { id: channelId, messages: [] };
+			const channel = newMap.get(channelId) || { id: channelId, messages: [], users: [] };
 			channel.messages = [...channel.messages, message.data];
+			newMap.set(channelId, channel);
+			return newMap;
+		});
+	}, []);
+
+	const setUsersInChannel = useCallback((channelId: string, users: string[]) => {
+		setChannels(prev => {
+			const newMap = new Map(prev);
+			const channel = newMap.get(channelId) || { id: channelId, messages: [], users: [] };
+			channel.users = users;
 			newMap.set(channelId, channel);
 			return newMap;
 		});
@@ -64,13 +75,17 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 		ws.onmessage = (event) => {
 			try {
 				const payload = JSON.parse(event.data);
-
 				if (!isWebSocketPayload(payload))
 					return;
 
-
 				if (isChatMessagePayload(payload)) {
 					addMessageToChannel(payload.data.channel, payload);
+					return;
+				}
+
+				if (isUsersListPayload(payload)) {
+					setUsersInChannel(payload.data.channel, payload.data.users);
+					return;
 				}
 
 				console.warn('🤕 Received unknown WebSocket message:', payload);
@@ -121,7 +136,7 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 		if (!channels.has(channel)) {
 			setChannels(prev => {
 				const newMap = new Map(prev);
-				newMap.set(channel, { id: channel, messages: [] });
+				newMap.set(channel, { id: channel, messages: [], users: [] });
 				return newMap;
 			});
 		}
