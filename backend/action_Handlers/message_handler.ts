@@ -1,5 +1,5 @@
-import type { ChatMessagePayload } from "../shared/websocket-messages.ts"
-import { ChannelManager } from "./channelManager.ts";
+import type { ChatMessagePayload } from "../../shared/websocket-messages.ts"
+import { ChannelManager } from "../class_Management/channelManager.ts";
 
 export function user_msg(channel: string, content: string, user: string) {
 

@@ -1,6 +1,6 @@
 import { Channel } from "./channel.ts";
-import * as typo from "../shared/websocket-messages.ts"
-import { type ServerWebSocket } from "./index.ts"
+import * as typo from "../../shared/websocket-messages.ts"
+import { type ServerWebSocket } from "../index.ts"
 
 export class ChannelManager {
     public channels: Map<string, Channel> = new Map();

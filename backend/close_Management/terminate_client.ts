@@ -1,5 +1,5 @@
 import type { ServerWebSocket } from '../index.ts'
-import { ChannelManager } from '../channelManager.ts'
+import { ChannelManager } from '../class_Management/channelManager.ts'
 
 export function terminate_client(ws: ServerWebSocket) {
     const Manager_Chan = ChannelManager.getInstance();

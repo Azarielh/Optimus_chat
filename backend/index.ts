@@ -1,7 +1,7 @@
 import { serve } from "bun";
 import homepage from "../frontend/index.html";
 import { ws_message_handler } from "./ws_message_handler.ts";
-import { terminate_client } from "./closure/terminate_client.ts";
+import { terminate_client } from "./close_Management/terminate_client.ts";
 
 
 export type WebSocketData = {

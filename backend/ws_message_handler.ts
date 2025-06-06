@@ -1,10 +1,15 @@
 import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload, type SubscribeChannelPayload } from "../shared/websocket-messages.ts";
-import { ChannelManager } from "./channelManager.ts";
-import { channel_subscribe, channel_unsuscribe, isUserSuscribed } from "./channel_subscribe_handler.ts";
-import { user_msg } from "./new_message_handler.ts";
+import { ChannelManager } from "./class_Management/channelManager.ts";
+import { channel_subscribe, channel_unsuscribe, isUserSuscribed } from "./action_Handlers/channel_subscribe_handler.ts";
+import { user_msg } from "./action_Handlers/message_handler.ts";
 import type { ServerWebSocket } from "./index.ts";
 
-
+/**
+ * @brief Init the ChannelManager, checks the data_type and call the functions accordingly.
+ * @param ws 
+ * @param message 
+ * @returns 
+ */
 export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer<ArrayBufferLike>) {
 
 //_____________________  Initialize Channel Manager  __________________
