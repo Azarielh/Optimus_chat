@@ -1,13 +1,14 @@
-// Request Reception
-import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload } from "../shared/websocket-messages.ts";
-import { channel_subscribe } from "./channel_subscribe_handler.ts";
+import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload, type SubscribeChannelPayload } from "../shared/websocket-messages.ts";
 import { ChannelManager } from "./channelManager.ts";
+import { channel_subscribe, channel_unsuscribe, isUserSuscribed } from "./channel_subscribe_handler.ts";
+import { user_msg } from "./new_message_handler.ts";
 import type { ServerWebSocket } from "./index.ts";
-import { user_msg, welcome_msg} from "./new_message_handler.ts";
+
 
 export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer<ArrayBufferLike>) {
 
-// Initialize Channel Manager
+//_____________________  Initialize Channel Manager  __________________
+
     const Manager_Chan = ChannelManager.getInstance();
     const payload = JSON.parse(message.toString());
 
@@ -35,10 +36,15 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
         user_msg(this_chan, msg, user);
     }
 // Subscribe a user to the requested channel | create it if new
-    else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload)) {
+    else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload) 
+                && isUserSuscribed(this_chan, user)) {
         console.log(type, ` : ${user} join ${this_chan}`);
         channel_subscribe(this_chan, user, ws);
     }
+// Unsuscribe a user
+    else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload)
+                && !isUserSuscribed(this_chan, user)) {
+        console.log('unsuscribe user');
+        channel_unsuscribe(this_chan, user, ws);
+    }
 }
-
-

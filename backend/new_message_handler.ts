@@ -14,12 +14,12 @@ export function user_msg(channel: string, content: string, user: string) {
     Manager_Chan.sendo(message);
 }
 
-export function welcome_msg(channel: string, user: string) {
+export function Optimus_msg(channel: string, user: string, msg: string) {
    
     const Manager_Chan = ChannelManager.getInstance();
     const message: ChatMessagePayload['data'] = {
         channel: channel,
-        content: `Optimus Prime is very pleased to finally see your arrival sir ${user}`,
+        content: msg,
         date: new Date().toISOString(),
         user: 'Optimus Prime',
 

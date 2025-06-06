@@ -7,8 +7,8 @@ export class Channel {
     messages: ChatMessagePayload['data'][] = [];
 
     join(ws: ServerWebSocket, user: string) {
-        if (!this.users.has('Optimus Prime'))
-            this.users.set('Optimus_Prime', ws);
+        // if (!this.users.has('Optimus Prime'))
+        //     this.users.set('Optimus_Prime', ws);
         if (!this.users.has(user))
             this.users.set(user, ws);
         else
@@ -33,16 +33,17 @@ export class Channel {
         })
     }
 
-    give_list(ws: ServerWebSocket) {
+    give_list(ws: ServerWebSocket): boolean {
         const payload = {
             type:   'Users_list',
             channel: this.name,
-            users:  Array.from(this.users.keys()),
+            users:  'Optimus Prime, ' + Array.from(this.users.keys()),
         };
         const payloadStr = JSON.stringify(payload);
         ws.send(payloadStr);
         console.log('give_list :',  payloadStr);
 
+        return !!payloadStr;
     }
 
     constructor(public name: string) {}

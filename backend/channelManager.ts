@@ -10,7 +10,6 @@ export class ChannelManager {
     static getInstance() {
         if (!ChannelManager.instance)
             ChannelManager.instance = new ChannelManager('main');
-            // this.channels.set('main', new Channel('main'));
         return ChannelManager.instance;
     }
 
@@ -32,13 +31,18 @@ export class ChannelManager {
         else console.error(`Subscribe : An error occured while attempting to join this ${channel}`);
     }
 
-    unsuscribe(channel: string, user: string) {
+    unsuscribe(channel: string, user: string, ws: ServerWebSocket) {
         const this_chan = this.get_or_build(channel);
-        if (this_chan)
-            this_chan.quit(user)
+        if (this_chan) {
+            this_chan.quit(user);
+            this_chan.give_list(ws);
+        }
     }
-    sendo(data: typo.ChatMessagePayload['data']) {
-        this.channels.get(data.channel)!.publish(data);
+
+    sendo(data: typo.ChatMessagePayload['data']): boolean{
+        const msg = this.channels.get(data.channel)?.publish(data);
+
+        return !!msg;
     }
 
     constructor(public name: string) {}
