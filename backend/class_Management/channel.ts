@@ -40,12 +40,15 @@ export class Channel {
             }
         };
 
-        
-        const payloadStr = JSON.stringify(payload);
+        payload.data.users.unshift('Optimus Prime')
+        let payloadStr = JSON.stringify(payload);
         this.users.forEach((users) => {
             users.send(payloadStr);
         });
-        console.log('give_list :',  'Optimus Prime', payloadStr);
+        console.log('give_list :', payloadStr);
+
+        payload.data.users.shift()
+        payloadStr = JSON.stringify(payload);
 
         return !!payloadStr;
     }

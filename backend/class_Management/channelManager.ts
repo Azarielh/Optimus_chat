@@ -45,6 +45,8 @@ export class ChannelManager {
         return !!msg;
     }
 
+    //giveChanList
+    
     constructor(public name: string) {}
 
 }

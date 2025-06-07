@@ -2,6 +2,7 @@ import { serve } from "bun";
 import homepage from "../frontend/index.html";
 import { ws_message_handler } from "./ws_message_handler.ts";
 import { terminate_client } from "./close_Management/terminate_client.ts";
+import { ws_arrival_handler } from "./open_Management/new_client.ts";
 
 
 export type WebSocketData = {
@@ -33,15 +34,9 @@ const server = serve({
   },
 
   websocket: { 
-    message: ws_message_handler,
-    open(ws: ServerWebSocket) {
-      	console.log('WebSocket opened:', ws.data.uuid);
-      	ws.subscribe('main'); // subscribe to a channel
-    }, // a socket is opened
-    close(ws: ServerWebSocket, code, message) {
-	// Kill all the client connections
-		terminate_client(ws);
-	}, // a socket is closed
+	open: ws_arrival_handler,		// a socket is opened
+	message: ws_message_handler,	// other client interaction
+    close: terminate_client,		// a socket is closed
   }
 });
 
