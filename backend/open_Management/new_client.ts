@@ -1,9 +1,10 @@
 import type { ServerWebSocket } from "..";
+import { channel_subscribe } from "../action_Handlers/channel_subscribe_handler";
 import { ChannelManager } from "../class_Management/channelManager";
 
 
 export function ws_arrival_handler(ws: ServerWebSocket) {
-    const Manager_chan = ChannelManager.getInstance();
+    const user = ws.data.uuid;
 
-    Manager_chan.subscribe('main', ws.data.uuid, ws);
+    channel_subscribe('main', user, ws);
 }

@@ -32,6 +32,7 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     console.log('Data type = ', type);
 //_____________________  Distribution  _________________________
 
+    console.log( 'is user sucribed : ', isUserSuscribed(this_chan, user))
 
 // Send message to corresponding channel
     if (type == 'chat_message' && isChatMessagePayload(payload)) {
@@ -42,7 +43,7 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     }
 // Subscribe a user to the requested channel | create it if new
     else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload) 
-                && isUserSuscribed(this_chan, user)) {
+                && this_chan != 'main' && isUserSuscribed(this_chan, user)) {
         console.log(type, ` : ${user} join ${this_chan}`);
         channel_subscribe(this_chan, user, ws);
     }
