@@ -20,6 +20,7 @@
     "@headlessui/react": "^2.2.4",
     "@types/react-dom": "^19.1.5",
     "bun-plugin-tailwind": "^0.0.15",
+    "chalk": "^5.4.1",
     "react-dom": "^19.1.0",
     "react-icons": "^5.5.0",
     "tailwindcss": "^4.1.7",
