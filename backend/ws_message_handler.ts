@@ -42,13 +42,13 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     }
 // Subscribe a user to the requested channel | create it if new
     else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload) 
-                && !isUserSuscribed(this_chan, user)) {
+                && isUserSuscribed(this_chan, user)) {
         console.log(type, ` : ${user} join ${this_chan}`);
         channel_subscribe(this_chan, user, ws);
     }
 // Unsuscribe a user
     else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload)
-                && isUserSuscribed(this_chan, user)) {
+                && !isUserSuscribed(this_chan, user)) {
         console.log('unsuscribe user');
         channel_unsuscribe(this_chan, user, ws);
     }

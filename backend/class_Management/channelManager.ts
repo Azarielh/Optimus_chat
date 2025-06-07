@@ -27,6 +27,7 @@ export class ChannelManager {
         if (this_chan) {
             this_chan.join(ws, user);
             this_chan.give_list(ws);
+            console.log(`${user} has suscribed to ${this_chan}`);
         }
         else console.error(`Subscribe : An error occured while attempting to join this ${channel}`);
     }
@@ -36,6 +37,7 @@ export class ChannelManager {
         if (this_chan) {
             this_chan.quit(user);
             this_chan.give_list(ws);
+            console.log(`${user} has unsuscribed to ${this_chan}`);
         }
     }
 
@@ -46,7 +48,7 @@ export class ChannelManager {
     }
 
     //giveChanList
-    
+
     constructor(public name: string) {}
 
 }

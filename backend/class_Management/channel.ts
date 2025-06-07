@@ -31,11 +31,11 @@ export class Channel {
         });
     }
 
-    give_list(ws: ServerWebSocket, chan_filter?: string): boolean {
+    give_list(ws: ServerWebSocket): boolean {
         const payload: UsersListPayload = {
             type:   'Users_list',
             data: {
-                channel: chan_filter ?? this.name,
+                channel: this.name,
                 users: this.users.keys().toArray()
             }
         };
