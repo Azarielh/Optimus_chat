@@ -73,7 +73,23 @@ Subscribing to a channel should also create it if it does not exist.
 ```json
 {
 	"type": "Users_list",
-	"channel": "channel_id",
-	"users": "user_id"
+	"data": {
+		"channel": "<channel_id>",
+		"users": [
+			"<user_id_1>",
+			"<user_id_2>",
+			"..."
+		]
+	}
+}
+```
+
+### 3.3 Unsubscribe from Channel
+```json
+{
+	"type": "unsubscribe_channel",
+	"data": {
+		"channel": "<channel_id>"
+	}
 }
 ```

@@ -159,13 +159,24 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 		setCurrentChannel(channel);
 	}, [channels]);
 
-	// Unsubscribe (client-side only)
+
 	const unsubscribeChannel = useCallback((channel: string) => {
 		setChannels(prev => {
 			const newMap = new Map(prev);
 			newMap.delete(channel);
 			return newMap;
 		});
+
+		if (!wsRef.current || wsRef.current.readyState !== WebSocket.OPEN) {
+			console.warn('WebSocket is not open. Cannot unsubscribe to channel.');
+			return;
+		}
+
+		wsRef.current.send(JSON.stringify({
+			type: 'unsubscribe_channel',
+			data: { channel }
+		}));
+
 		if (currentChannel === channel) {
 			setCurrentChannel('main');
 		}

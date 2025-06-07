@@ -1,11 +1,13 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ChatContext } from "../contexts/chat-context";
 import type { ChatMessagePayload } from "../../../shared/websocket-messages";
-import { FaPaperPlane, FaUsers, FaUsersSlash } from "react-icons/fa";
+import { FaDoorOpen, FaPaperPlane, FaUsers, FaUsersSlash } from "react-icons/fa";
 import { FaCirclePlus, FaFaceSmileWink } from "react-icons/fa6";
 import { UserListPanel } from "./user-list";
 import { UserAvatar } from "./user-avatar";
 import { useLocalStorage } from "usehooks-ts";
+import { Channel } from "diagnostics_channel";
+import { ChannelLeaveDialog } from "./channel-leave-dialog";
 
 function ToggleUserListButton() {
 	const [userListOpen, setUserListOpen] = useLocalStorage<boolean>("chat:user-list:open", true);
@@ -19,12 +21,42 @@ function ToggleUserListButton() {
 	);
 }
 
-function ChatHeader(props: { channelId: string }) {
 
+function LeaveChannelButton() {
+	const chatContext = useContext(ChatContext);
+
+	const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+	const onLeaveChannel = useCallback(() => {
+		if (chatContext.currentChannel) {
+			chatContext.unsubscribeChannel(chatContext.currentChannel);
+			setIsDialogOpen(false);
+		}
+	}, [chatContext.currentChannel]);
+
+	return (
+		<>
+			<div className="tooltip tooltip-left" data-tip="Leave channel">
+				<button className="btn btn-ghost btn-square" onClick={() => setIsDialogOpen(true)}>
+					<FaDoorOpen className="text-xl text-error" />
+				</button>
+			</div>
+			<ChannelLeaveDialog
+				isOpen={isDialogOpen}
+				setIsOpen={setIsDialogOpen}
+				onLeaveChannel={onLeaveChannel}
+				channelId={chatContext.currentChannel}
+			/>
+		</>
+	);
+}
+
+function ChatHeader(props: { channelId: string }) {
 	return (
 		<div className="h-11 w-full p-2 border-b border-base-300 flex items-center justify-between">
 			<h2 className="text-lg font-semibold">#{props.channelId}</h2>
 			<div className="flex items-center gap-2">
+				<LeaveChannelButton />
 				<ToggleUserListButton />
 			</div>
 		</div>
@@ -82,7 +114,7 @@ function ChatInput() {
 
 		chatContext.sendMessage(chatContext.currentChannel, inputRef.current.value);
 		inputRef.current.value = "";
-	}, [chatContext]);
+	}, [chatContext.currentChannel]);
 
 	return (
 		<form className="flex gap-2" onSubmit={handleSubmit}>

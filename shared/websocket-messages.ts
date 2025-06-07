@@ -39,4 +39,12 @@ export function isUsersListPayload(payload: WebSocketPayload<string, any>): payl
 		('users' in payload.data)  && Array.isArray(payload.data.users)
 }
 
+export type UnsubscribeChannelPayload = WebSocketPayload<'unsubscribe_channel', {
+	channel: string;
+}>;
+
+export function isUnsubscribeChannelPayload(payload: WebSocketPayload<string, any>): payload is UnsubscribeChannelPayload {
+	return ('channel' in payload.data) && typeof payload.data.channel === 'string';
+}
+
 export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload | UsersListPayload
