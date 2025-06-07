@@ -32,8 +32,6 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     console.log('Data type = ', type);
 //_____________________  Distribution  _________________________
 
-    console.log( 'is user sucribed : ', isUserSuscribed(this_chan, user))
-
 // Send message to corresponding channel
     if (type == 'chat_message' && isChatMessagePayload(payload)) {
         console.log(type, ` : ${user} send a message`);
