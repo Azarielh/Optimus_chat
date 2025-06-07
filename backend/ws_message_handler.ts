@@ -29,7 +29,7 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     const this_chan = payload.data.channel;
     const user = ws.data.uuid;
     const type = payload.type;
-
+    console.log('Data type = ', type);
 //_____________________  Distribution  _________________________
 
 
@@ -47,7 +47,7 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
         channel_subscribe(this_chan, user, ws);
     }
 // Unsuscribe a user
-    else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload)
+    else if (type == 'unsubscribe_channel' && isSubscribeChannelPayload(payload)
                 && !isUserSuscribed(this_chan, user)) {
         console.log('unsuscribe user');
         channel_unsuscribe(this_chan, user, ws);
