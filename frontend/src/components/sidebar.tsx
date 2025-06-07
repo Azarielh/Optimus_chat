@@ -23,7 +23,7 @@ function ChannelListItem({ channelId }: { channelId: string }) {
 
 	return (
 		<li className="menu-item">
-			<button onClick={onClick} className="flex items-center gap-1">
+			<button aria-selected={channelId == chatContext.currentChannel} onClick={onClick} className="flex items-center gap-1 aria-selected:bg-base-300">
 				<span className="text-base-content/40">#</span>
 				<span>{channelId}</span>
 			</button>

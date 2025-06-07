@@ -47,4 +47,4 @@ export function isUnsubscribeChannelPayload(payload: WebSocketPayload<string, an
 	return ('channel' in payload.data) && typeof payload.data.channel === 'string';
 }
 
-export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload | UsersListPayload
+export type WebSocketMessagePayload = ChatMessagePayload | SubscribeChannelPayload | UsersListPayload | UnsubscribeChannelPayload;
