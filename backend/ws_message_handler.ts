@@ -1,7 +1,7 @@
-import { isChatMessagePayload, isSubscribeChannelPayload, isWebSocketPayload, type ChatMessagePayload, type SubscribeChannelPayload } from "../shared/websocket-messages.ts";
+import { isChatMessagePayload, isChatMsgPayloadHasAttachment, isSubscribeChannelPayload, isWebSocketPayload, type Attachment, type ChatMessagePayload, type SubscribeChannelPayload } from "../shared/websocket-messages.ts";
 import { ChannelManager } from "./class_Management/channelManager.ts";
 import { channel_subscribe, channel_unsuscribe, isUserSuscribed } from "./action_Handlers/channel_subscribe_handler.ts";
-import { user_msg } from "./action_Handlers/message_handler.ts";
+import { user_img_msg, user_msg } from "./action_Handlers/message_handler.ts";
 import type { ServerWebSocket } from "./index.ts";
 
 /**
@@ -11,6 +11,14 @@ import type { ServerWebSocket } from "./index.ts";
  * @returns 
  */
 export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer<ArrayBufferLike>) {
+
+const file: Attachment = {
+    type: 'image',
+    url: 'backend\Screenshot 2025-06-04 14.42.31 1.png',
+    name: 'test', // should get original file's name
+    size: 5, // should get size in octet
+    mimeType: 'image/png',
+}
 
 //_____________________  Initialize Channel Manager  __________________
 
@@ -36,8 +44,13 @@ export function ws_message_handler(ws: ServerWebSocket, message: string | Buffer
     if (type == 'chat_message' && isChatMessagePayload(payload)) {
         console.log(type, ` : ${user} send a message`);
         const msg  = payload.data.content;
-
-        user_msg(this_chan, msg, user);
+        if (!isChatMsgPayloadHasAttachment(payload)){
+            //user_msg(this_chan, msg, user);
+            user_img_msg(this_chan, msg, user, file)        
+        }
+        //else 
+            //user_img_msg(this_chan, msg, user, file)
+            
     }
 // Subscribe a user to the requested channel | create it if new
     else if (type == 'subscribe_channel' && isSubscribeChannelPayload(payload) 

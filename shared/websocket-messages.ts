@@ -7,9 +7,18 @@ export function isWebSocketPayload(payload: any): payload is WebSocketPayload<st
 	return payload && typeof payload.type === 'string' && typeof payload.data === 'object';
 }
 
+export type Attachment = {
+	type: 'image'; 
+	url: string;
+	name: string; // should get original file's name
+	size?: number; // should get size in octet
+	mimeType?: string; // 
+}
+
 export type ChatMessagePayload = WebSocketPayload<'chat_message', {
 	channel: string;
 	content: string;
+	attachment: Attachment | null; 
 	user: string;
 	date: string;
 }>;
@@ -19,6 +28,10 @@ export function isChatMessagePayload(payload: WebSocketPayload<string, any>): pa
 		('content' in payload.data) && typeof payload.data.content === 'string' &&
 		('user' in payload.data) && typeof payload.data.user === 'string' &&
 		('date' in payload.data) && typeof payload.data.date === 'string';
+}
+
+export function isChatMsgPayloadHasAttachment(payload: ChatMessagePayload): boolean {
+	return payload.data.attachment?.type === 'image';
 }
 
 export type SubscribeChannelPayload = WebSocketPayload<'subscribe_channel', {
