@@ -12,7 +12,7 @@ export function channel_subscribe(channel: string, user: string, ws: ServerWebSo
     const Manager_Chan = ChannelManager.getInstance();
 
     Manager_Chan.subscribe(channel, user, ws)
-    Optimus_msg(channel, user, `Optimus Prime is very pleased to finally see your arrival sir ${user}`);
+    Optimus_msg(channel, user, `Optimus Prime is very pleased to finally see your arrival sir `);
 }
 
 /**
