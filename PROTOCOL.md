@@ -36,7 +36,8 @@ Format for chat messages sent to the server:
 	"type": "chat_message",
 	"data": {
 		"channel": "<channel_id>",
-		"content": "<message_content>"
+		"content": "<message_content>",
+		"attachments": string[], // Base64 encoded strings of attachments
 	}
 }
 ```
@@ -51,7 +52,8 @@ Format for chat messages received from the server:
 	"data": {
 		"channel": "<channel_id>",
 		"user_id": "<user_id>",
-		"content": "<message_content>"
+		"content": "<message_content>",
+		"attachments": string[], // Base64 encoded strings of attachments
 	}
 }
 ```
