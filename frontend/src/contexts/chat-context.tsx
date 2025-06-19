@@ -129,6 +129,8 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 
 		wsRef.current.send(JSON.stringify(message));
 
+		umami?.track('message-send', { channel });
+
 	}, []);
 
 	// Subscribe to a channel
@@ -156,6 +158,8 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 			data: { channel }
 		}));
 
+		umami?.track('subscribe-channel', { channel });
+
 		setCurrentChannel(channel);
 	}, [channels]);
 
@@ -176,6 +180,8 @@ export const ChatContextProvider = (props: { children: React.ReactNode }) => {
 			type: 'unsubscribe_channel',
 			data: { channel }
 		}));
+
+		umami?.track('unsubscribe-channel', { channel });
 
 		if (currentChannel === channel) {
 			setCurrentChannel('main');

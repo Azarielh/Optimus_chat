@@ -16,6 +16,7 @@
       "devDependencies": {
         "@types/bun": "latest",
         "@types/node": "^22.15.21",
+        "@types/umami": "^2.10.0",
         "daisyui": "^5.0.37",
       },
       "peerDependencies": {
@@ -63,6 +64,8 @@
     "@types/react": ["@types/react@19.1.6", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-JeG0rEWak0N6Itr6QUx+X60uQmN+5t3j9r/OVDtWzFXKaj6kD1BwJzOksD0FF6iWxZlbE1kB0q9vtnU2ekqa1Q=="],
 
     "@types/react-dom": ["@types/react-dom@19.1.5", "", { "peerDependencies": { "@types/react": "^19.0.0" } }, "sha512-CMCjrWucUBZvohgZxkjd6S9h0nZxXjzus6yDfUb+xLxYM7VvjKNH1tQrE9GWLql1XoOP4/Ds3bwFqShHUYraGg=="],
+
+    "@types/umami": ["@types/umami@2.10.0", "", {}, "sha512-iWcs1KkcO3ooIi2rR9M5drmpQzlsT+sFiyWElIGmVwjdGlp+vQmy/VYIChYnF5ETqx7KrL80JfSkroS6dm37Hg=="],
 
     "bun-plugin-tailwind": ["bun-plugin-tailwind@0.0.15", "", { "peerDependencies": { "typescript": "^5.0.0" } }, "sha512-qtAXMNGG4R0UGGI8zWrqm2B7BdXqx48vunJXBPzfDOHPA5WkRUZdTSbE7TFwO4jLhYqSE23YMWsM9NhE6ovobw=="],
 
